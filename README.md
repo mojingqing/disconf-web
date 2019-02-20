@@ -11,6 +11,10 @@
 
 都换成自己实际搭建对外开放的地址。
 
+请看开源作者的主页https://github.com/knightliao/disconf 
+
+使用的详细文档：https://disconf.readthedocs.io/zh_CN/latest/
+
 disconf-web 
 ===========
 
