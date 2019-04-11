@@ -141,6 +141,7 @@ Disconf-client客户端使用说明：
 	<version>2.6.36</version>
 </dependency>
 
+
 2.	在客户端应用的classpath下新增disconf.properties文件
 
 文件示例：
@@ -170,17 +171,32 @@ disconf.enable_local_download_dir_in_class_path=true
 3.	在applicationContext.xml 添加Disconf启动支持
 
 <aop:aspectj-autoproxy proxy-target-class="true" /> 
+
 <!-- 使用disconf必须添加以下配置 -->
-<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean" destroy-method="destroy">
+<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
+destroy-method="destroy">
 <!--disconf配置对象扫描包,scanPackage是扫描标注了disconf注解类所在包路径 -->
-	<property name="scanPackage" value="com.disconf.config" />
-</bean>
-<bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond" init-method="init" destroy-method="destroy">
+		<property name="scanPackage" value="com.disconf.config" />
 </bean>
 
+<bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond"
+		init-method="init" destroy-method="destroy">
+</bean>
 
 
 配置文件注解使用
+
+package com.disconf.config;
+
+import org.springframework.stereotype.Service;
+
+import com.baidu.disconf.client.common.annotations.DisconfFile;
+
+@Service
+@DisconfFile(filename = "config-demo.properties")
+public class ConfigDemoProperties{
+
+}
 
 
 4.	文件托管
