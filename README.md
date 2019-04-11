@@ -95,43 +95,8 @@ testUser5 | MhxzKhl112
 ### 部署War ###
 打包，放到tomcat的webapps下
 
-## 业务功能 ##
-
-- 支持用户登录/登出
-- 浏览配置
-	- 按 APP/版本/环境 选择
-- 修改配置
-	- 修改配置项
-	- 修改配置文件
-- 新建配置
-	- 新建配置项
-	- 新建配置文件
-	- 新建APP
-
-## 架构方案 ##
-
-Nginx(处理静态请求) + Tomcat(处理动态请求）
-
-- **后端**
-    - SpringMvc（3.1.2+)
-    - Jdbc-Template
-    - Mysql
-    - RestFul API
-    - Redis for user login/logout
-    - H2内存数据库测试方案/Junit/SpringTest
-- **前端**
-    - HTML
-    - Jquery(1.10.4)：JS工具集合
-    - Bootstrap(2.3.2)：界面UI
-    - Node(ejs/fs/eventproxy): 用于前端的HTML的模板化管理
-- **前后端接口(前后端分离)**
-    - 完全Ajax接口
-    - JSON
-    - RestFul API
-
 
 Disconf-client客户端使用说明：
-
 
 1.	pom.xml文件中导入jar
 
@@ -140,7 +105,6 @@ Disconf-client客户端使用说明：
 	<artifactId>disconf-client</artifactId>
 	<version>2.6.36</version>
 </dependency>
-
 
 2.	在客户端应用的classpath下新增disconf.properties文件
 
@@ -173,10 +137,9 @@ disconf.enable_local_download_dir_in_class_path=true
 <aop:aspectj-autoproxy proxy-target-class="true" /> 
 
 <!-- 使用disconf必须添加以下配置 -->
-<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean"
-destroy-method="destroy">
-<!--disconf配置对象扫描包,scanPackage是扫描标注了disconf注解类所在包路径 -->
-		<property name="scanPackage" value="com.disconf.config" />
+<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean" destroy-method="destroy">
+    <!--disconf配置对象扫描包,scanPackage是扫描标注了disconf注解类所在包路径 -->
+	<property name="scanPackage" value="com.disconf.config" />
 </bean>
 
 <bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond"
@@ -187,9 +150,7 @@ destroy-method="destroy">
 配置文件注解使用
 
 package com.disconf.config;
-
 import org.springframework.stereotype.Service;
-
 import com.baidu.disconf.client.common.annotations.DisconfFile;
 
 @Service
@@ -201,7 +162,7 @@ public class ConfigDemoProperties{
 
 4.	文件托管
 
-<!--需要拉取更新的文件 -->  
+    <!--需要拉取更新的文件 -->  
 	<!-- 使用托管方式的disconf配置(无代码侵入, 配置更改会自动reload) -->
 	<bean id="configproperties_disconf"		class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
 		<property name="locations">
