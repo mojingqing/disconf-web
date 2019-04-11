@@ -130,5 +130,82 @@ Nginx(处理静态请求) + Tomcat(处理动态请求）
     - RestFul API
 
 
+Disconf-client客户端使用说明：
+
+
+1.	pom.xml文件中导入jar
+
+<dependency>
+	<groupId>com.baidu.disconf</groupId>
+	<artifactId>disconf-client</artifactId>
+	<version>2.6.36</version>
+</dependency>
+
+2.	在客户端应用的classpath下新增disconf.properties文件
+
+文件示例：
+
+#是否使用远程配置文件
+#true(默认)会从远程获取配置 false直接获取本地配置
+disconf.enable.remote.conf=true
+#配置服务器的host,用逗号分隔(disconf服务器地址)
+disconf.conf_server_host=localhost:8080/disconf
+#版本，官方推荐采用X_X_X_X
+disconf.version=1_0_0_0
+#采用产品线_服务名 格式
+disconf.app=Online_wf
+#环境
+disconf.env=local
+disconf.ignore=
+#获取远程配置重复次数，默认是3次
+disconf.conf_server_url_retry_times=3
+#获取远程配置，重试时休眠时间，默认是5秒#
+disconf.conf_server_url_retry_sleep_seconds=1
+#用户定义的下载文件夹，远程文件下载后会放在这里。
+disconf.user_define_download_dir=/workspace/Online_wf/src/main/resources/conf
+#下载的文件会被迁移到classpath根路径下，默认是true
+disconf.enable_local_download_dir_in_class_path=true
+
+
+3.	在applicationContext.xml 添加Disconf启动支持
+
+<aop:aspectj-autoproxy proxy-target-class="true" /> 
+<!-- 使用disconf必须添加以下配置 -->
+<bean id="disconfMgrBean" class="com.baidu.disconf.client.DisconfMgrBean" destroy-method="destroy">
+<!--disconf配置对象扫描包,scanPackage是扫描标注了disconf注解类所在包路径 -->
+	<property name="scanPackage" value="com.disconf.config" />
+</bean>
+<bean id="disconfMgrBean2" class="com.baidu.disconf.client.DisconfMgrBeanSecond" init-method="init" destroy-method="destroy">
+</bean>
+
+
+
+配置文件注解使用
+
+
+4.	文件托管
+
+<!--需要拉取更新的文件 -->  
+	<!-- 使用托管方式的disconf配置(无代码侵入, 配置更改会自动reload) -->
+	<bean id="configproperties_disconf"		class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
+		<property name="locations">
+			<list>
+			<value>classpath:/config-demo.properties</value>       		
+			</list>
+		</property>
+	</bean>
+
+	<!--内容有变动，重新reload -->
+	<bean id="propertyConfigurer"		class="com.baidu.disconf.client.addons.properties.ReloadingPropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="propertiesArray">
+			<list>
+				<ref bean="configproperties_disconf" />
+			</list>
+		</property>
+	</bean>
+
+
 
 
